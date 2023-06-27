@@ -16,9 +16,17 @@ require("./config")(app);
 
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
+const ErrorHandler = require("./utils/ErrorHandler");
 app.use("/api", indexRoutes);
 
+const user = require("./routes/user.routes")
+app.use("/user", user);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
-require("./error-handling")(app);
+require("./middlewares/error")(app);
+
+
+
+app.use(ErrorHandler)
 
 module.exports = app;
