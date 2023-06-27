@@ -13,6 +13,10 @@ const cookieParser = require("cookie-parser");
 // unless the request if from the same domain, by default express wont accept POST requests
 const cors = require("cors");
 
+const bodyParser =require("body-parser")
+
+
+
 const FRONTEND_URL = process.env.ORIGIN || "http://localhost:3000";
 
 // Middleware configuration
@@ -33,6 +37,9 @@ module.exports = (app) => {
 
   // To have access to `body` property in the request
   app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
+  app.use(express.urlencoded({ extended: false}));
   app.use(cookieParser());
+  app.use("/", express.static("uploads"));
+  app.use(bodyParser.urlencoded({extended:true, limit:"50mb"}))
+ 
 };
