@@ -1,3 +1,4 @@
+
 const User = require("../models/User.model")
 const express = require ("express");
 const path = require("path");
@@ -37,5 +38,6 @@ router.post("/signup",async(req,res) =>{
 //     console.log(user);
 
 // } )
+
 
 module.exports = router;
