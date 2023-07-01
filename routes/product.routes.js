@@ -3,10 +3,6 @@ const router = express.Router();
 const Product = require('../models/product.model');
 const User = require('../models/User.model');
 
-// const { getProducts, newProduct } = require('../controllers/productControllers');
-
-// router.route('/allproducts').get(getProducts);
-// router.route('/newproduct').post(newProduct)
 
 
 router.post("/newproduct", async (req, res) => {

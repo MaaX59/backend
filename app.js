@@ -26,7 +26,10 @@ const products = require('./routes/product.routes')
 app.use('/product', products)
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
-require("./middlewares/error")(app);
+const { errorHandlingFunction } = require("./middlewares/error");
+// ...
+errorHandlingFunction(app);
+
 
 
 

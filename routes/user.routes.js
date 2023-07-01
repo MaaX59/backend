@@ -72,6 +72,7 @@ console.log("login req.body", req.body);
 
 router.get('/verify',isAuthenticated, (req,res) =>{
     console.log("Payload", req.payload)
+    const { _id} = req.payload;
     if(req.payload){
         res.status(200).json({user:req.payload})
     }
