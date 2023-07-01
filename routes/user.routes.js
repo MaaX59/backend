@@ -3,7 +3,9 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {isAuthenticated} = require('../middlewares/jwt.auth')
+const {isAuthenticated} = require('../middlewares/jwt.auth');
+
+
 // const { upload } = require("../multer");
 // const ErrorHandler = require("../utils/ErrorHandler");
 // const path = require("path");
@@ -11,7 +13,9 @@ const {isAuthenticated} = require('../middlewares/jwt.auth')
 
 
 router.post("/signup", async (req, res) => {
-  console.log(req.body);
+
+  //this doesn´t work, how is it suppose to send info from front to backend?
+  console.log("signup req.body",req.body);
   try {
 
     const existingUser = await User.findOne({ email: req.body.email });
@@ -36,15 +40,18 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+//get info from form
+
+console.log("login req.body", req.body);
   try {
     const foundUser = await User.findOne({ email: req.body.email });
-    //console.log("here is the found User", foundUser)
+    console.log("here is the found User", foundUser)
     if (foundUser) {
       const passwordMatch = bcrypt.compareSync(
         req.body.password,
         foundUser.password
       );
-      //console.log("Password Match", passwordMatch);
+      console.log("Password Match", passwordMatch);
       if (passwordMatch) {
         const { _id, email } = foundUser;
         const payload = { _id, email };
