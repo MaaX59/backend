@@ -3,24 +3,20 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const {isAuthenticated} = require('../middlewares/jwt.auth');
-
+const { isAuthenticated } = require("../middlewares/jwt.auth");
 
 // const { upload } = require("../multer");
 // const ErrorHandler = require("../utils/ErrorHandler");
 // const path = require("path");
 
-
-
 router.post("/signup", async (req, res) => {
-
-  //this doesn´t work, how is it suppose to send info from front to backend?
-  console.log("signup req.body",req.body);
+  console.log("signup req.body", req.body);
   try {
-
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
-      return res.status(400).json({ error: "Email already exists,Please Login!" });
+      return res
+        .status(400)
+        .json({ error: "Email already exists,Please Login!" });
     }
 
     const saltRounds = 10;
@@ -32,20 +28,26 @@ router.post("/signup", async (req, res) => {
       password: hashedpassword,
       avatar: req.body.file,
     });
-    console.log("Successful user", newUser);
-    res.status(201).json(newUser);
+    const { _id, email } = newUser;
+    const payload = { _id, email };
+    const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
+      algorithm: "HS256",
+      expiresIn: "6h",
+    });
+    console.log("New token", authToken);
+    res.status(200).json({ authToken });
   } catch (err) {
     console.log(err);
   }
 });
 
 router.post("/login", async (req, res) => {
-//get info from form
+  //get info from form
 
-console.log("login req.body", req.body);
+  console.log("login req.body", req.body);
   try {
     const foundUser = await User.findOne({ email: req.body.email });
-    console.log("here is the found User", foundUser)
+    console.log("here is the found User", foundUser);
     if (foundUser) {
       const passwordMatch = bcrypt.compareSync(
         req.body.password,
@@ -65,17 +67,17 @@ console.log("login req.body", req.body);
     } else {
       res.status(400).json({ errorMessage: "Invalid User" });
     }
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
 });
 
-router.get('/verify',isAuthenticated, (req,res) =>{
-    console.log("Payload", req.payload)
-    const { _id} = req.payload;
-    if(req.payload){
-        res.status(200).json({user:req.payload})
-    }
-})
+router.get("/verify", isAuthenticated, (req, res) => {
+  console.log("Payload", req.payload);
+  const { _id } = req.payload;
+  if (req.payload) {
+    res.status(200).json({ user: req.payload });
+  }
+});
 
 module.exports = router;

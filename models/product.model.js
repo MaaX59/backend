@@ -50,7 +50,7 @@ const productSchema = new Schema({
   },
   seller: {
     type: String,
-    required: [true, "Please enter product seller"],
+    // required: [true, "Please enter product seller"],
   },
   stock: {
     type: Number,

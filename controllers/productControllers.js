@@ -2,7 +2,7 @@ const Product = require('../models/product.model')
 const products = require('../data/products.json');
 
 
-exports.getProducts =async(req,res,next) =>{
+exports.getProducts = async (req,res,next) => {
     const product = await Product.find();
     res.status(200).json({
         success:true,
