@@ -43,7 +43,6 @@ router.post("/login", async (req, res) => {
 //get info from form
 
 console.log("login req.body", req.body);
-const {email, password} = req.body;
   try {
     const foundUser = await User.findOne({ email: req.body.email });
     console.log("here is the found User", foundUser)
