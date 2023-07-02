@@ -23,7 +23,6 @@ const productSchema = new Schema({
     {
       image: {
         type: String,
-        required: true,
       },
     },
   ],
@@ -55,7 +54,10 @@ const productSchema = new Schema({
   stock: {
     type: Number,
     required: [true, "Please enter product stock"],
-    maxLength: [20, "Product stock cannot exceed 20"],
+    maxLength: [200, "Product stock cannot exceed 200"],
+  },
+  sold:{
+    type: Number,
   },
   numOfReviews: {
     type: Number,

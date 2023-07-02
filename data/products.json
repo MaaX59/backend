@@ -80,7 +80,7 @@
         "seller": "Ebay",
         "stock": 9,
         "numOfReviews": 12,
-        "reviews": []
+        "reviews": [{"rating": 3.9}]
     },
     {
         "name": "PTron Newly Launched Tangent Sports, 60Hrs Playtime",
@@ -96,7 +96,7 @@
         "seller": "Amazon",
         "stock": 4,
         "numOfReviews": 20,
-        "reviews": []
+        "reviews": [{"rating": 3.1}]
     },
     {
         "name": "Campus Men's Maxico Running Shoes",
@@ -112,6 +112,8 @@
         "seller": "Ebay",
         "stock": 6,
         "numOfReviews": 9,
-        "reviews": []
+        "reviews": [
+            {"rating": 3.5}
+        ]
     }
 ]
