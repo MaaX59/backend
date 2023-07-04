@@ -4,7 +4,10 @@ const Product = require("../models/product.model");
 const User = require("../models/User.model");
 
 router.post("/newproduct", async (req, res) => {
-  console.log(req.body);
+  console.log("create product, need seller.avatar here",req.body);
+  const seller = await User.findById(req.body.seller);
+  console.log("seller",seller)
+  
   try {
     const createNewProduct = await Product.create({
       name: req.body.name,
@@ -14,6 +17,8 @@ router.post("/newproduct", async (req, res) => {
       category: req.body.category,
       stock: req.body.stock,
       seller: req.body.seller,
+      sellerAvatar: seller.avatar,
+
     });
     console.log("Successful creation of new product", createNewProduct);
   } catch (error) {

@@ -27,6 +27,8 @@ router.post("/signup", async (req, res) => {
       email: req.body.email,
       password: hashedpassword,
       avatar: req.body.file,
+      wishlist: null,
+      shoppingCart:null,
     });
     const { _id, email } = newUser;
     const payload = { _id, email };
