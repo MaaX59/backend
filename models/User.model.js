@@ -20,10 +20,10 @@ const userSchema = new Schema({
     type: String,
     required: false,
  },
- wishlist:{
-  type: Array,
-  items: {type:String}
- },
+ wishlist: {
+  type: Schema.Types.ObjectId,
+  ref: "Product",
+},
  shoppingCart:{
   type: Array,
   items: {type:String}
