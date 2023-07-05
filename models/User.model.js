@@ -20,6 +20,14 @@ const userSchema = new Schema({
     type: String,
     required: false,
  },
+ wishlist:{
+  type: Array,
+  items: {type:String}
+ },
+ shoppingCart:{
+  type: Array,
+  items: {type:String}
+ },
  createdAt:{
   type: Date,
   default: Date.now(),
