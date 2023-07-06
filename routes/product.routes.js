@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require("../models/product.model");
 const User = require("../models/User.model");
 
+
 router.post("/newproduct", async (req, res) => {
   console.log("create product, need seller.avatar here",req.body);
   const seller = await User.findById(req.body.seller);
@@ -38,5 +39,8 @@ router.get("/allproducts", async (req,res) => {
         
     }
 });
+
+
+
 
 module.exports = router;

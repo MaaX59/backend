@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require("../middlewares/jwt.auth");
 
+
 // const { upload } = require("../multer");
 // const ErrorHandler = require("../utils/ErrorHandler");
 // const path = require("path");
@@ -18,6 +19,8 @@ router.post("/signup", async (req, res) => {
         .status(400)
         .json({ error: "Email already exists,Please Login!" });
     }
+    const img= req.body.avatar;
+    console.log("img file",img)
 
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
