@@ -17,17 +17,23 @@ require("./config")(app);
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
 const ErrorHandler = require("./utils/ErrorHandler");
-const favouritesRoutes = require('./routes/favourites.routes');
+
 app.use("/api", indexRoutes);
 
-const user = require("./routes/user.routes")
-app.use("/user", user);
+const userRoutes = require("./routes/user.routes")
+app.use("/user", userRoutes);
 
-const products = require('./routes/product.routes')
-app.use('/product', products)
 
-const favourites = require('./routes/favourites.routes')
-app.use('/user', favourites)
+const wishListRoutes = require('./routes/wishlist.routes')
+app.use('/wishlist', wishListRoutes)
+
+const cartRoutes = require('./routes/cart.routes')
+app.use('/cart', cartRoutes)
+
+const productRoutes = require('./routes/product.routes')
+app.use('/product', productRoutes)
+
+
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 const { errorHandlingFunction } = require("./middlewares/error");
