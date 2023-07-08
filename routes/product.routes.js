@@ -41,6 +41,57 @@ router.get("/allproducts", async (req,res) => {
 });
 
 
+//get Single product
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      res.status(404).send("Product not found");
+    }
+    res.send({ product });
+  } catch (error) {
+    console.log("Error retrieving product:", error);
+  }
+});
+//update products
+router.put("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      res.status(404).send("Product not found");
+    }
+
+    product.name = req.body.name;
+    product.description = req.body.description;
+    product.price = req.body.price;
+    product.images = req.body.images;
+    product.category = req.body.category;
+    product.stock = req.body.stock;
+    product.seller = req.body.seller;
+
+    await product.save();
+    res.send({ product });
+  } catch (error) {
+    console.log("Error updating product:", error);
+  }
+});
+
+//delete products
+router.delete("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      res.status(404).send("Product not found");
+    }
+
+    await product.deleteOne();
+
+    res.status(200).send("Product deleted");
+  } catch (error) {
+    console.log("Error deleting product:", error);
+  }
+});
+
 
 
 module.exports = router;
