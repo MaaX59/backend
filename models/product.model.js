@@ -51,8 +51,12 @@ const productSchema = new Schema({
     type: String,
     // required: [true, "Please enter product seller"],
   },
+  sellerAvatar: {
+    type: String,
+  },
   stock: {
     type: Number,
+    default: 1,
     required: [true, "Please enter product stock"],
     maxLength: [200, "Product stock cannot exceed 200"],
   },

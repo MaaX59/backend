@@ -3,8 +3,12 @@ const router = express.Router();
 const Product = require("../models/product.model");
 const User = require("../models/User.model");
 
+
 router.post("/newproduct", async (req, res) => {
-  console.log(req.body);
+  console.log("create product, need seller.avatar here",req.body);
+  const seller = await User.findById(req.body.seller);
+  console.log("seller",seller)
+  
   try {
     const createNewProduct = await Product.create({
       name: req.body.name,
@@ -14,6 +18,8 @@ router.post("/newproduct", async (req, res) => {
       category: req.body.category,
       stock: req.body.stock,
       seller: req.body.seller,
+      sellerAvatar: seller.avatar,
+
     });
     console.log("Successful creation of new product", createNewProduct);
   } catch (error) {
@@ -33,6 +39,7 @@ router.get("/allproducts", async (req,res) => {
         
     }
 });
+
 
 //get Single product
 router.get("/:id", async (req, res) => {
@@ -84,6 +91,7 @@ router.delete("/:id", async (req, res) => {
     console.log("Error deleting product:", error);
   }
 });
+
 
 
 module.exports = router;
