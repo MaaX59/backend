@@ -4,6 +4,9 @@ const Product = require("../models/product.model");
 const User = require("../models/User.model");
 const { isAuthenticated } = require("../middlewares/jwt.auth");
 
+
+
+
 // router.post(
 //   "/:userId/wishlist/:productId",
 //   isAuthenticated,
@@ -151,10 +154,14 @@ const { isAuthenticated } = require("../middlewares/jwt.auth");
 //     res.status(500).json({ message: "Internal server error" });
 //   }
 // });
+// isAuthenticated,
 
-router.post("/:userId/wishlist/:productId" , isAuthenticated,  async (req, res) => {
+//add to wish list
+router.post("/:userId/addWishlist/:productId" ,   async (req, res) => {
+  
   try {
           const { userId, productId } = req.params;
+          console.log("backend wishlist", userId)
     
           const user = await User.findById(userId);
           if (!user) {
@@ -180,6 +187,8 @@ router.post("/:userId/wishlist/:productId" , isAuthenticated,  async (req, res) 
           res.status(500).json({ error: "Internal server error" });
         }
       });
+
+
       
       
 
@@ -203,7 +212,9 @@ router.get("/:userId", isAuthenticated, async (req, res) => {
   }
 });
 
-router.delete("/:userId/wishlist/:productId",isAuthenticated, async (req, res) => {
+
+//isAuthenticated,
+router.delete("/:userId/removeWishlist/:productId", async (req, res) => {
   
   try {
     const { userId, productId } = req.params;
