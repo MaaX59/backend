@@ -65,6 +65,8 @@ router.post("/login", async (req, res) => {
         });
         console.log("New token", authToken);
         res.status(200).json({ authToken });
+      } else {
+        res.status(401).json({ errorMessage: "Incorrect Password" });
       }
     } else {
       res.status(400).json({ errorMessage: "Invalid User" });
