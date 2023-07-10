@@ -65,6 +65,8 @@ router.post("/login", async (req, res) => {
         });
         console.log("New token", authToken);
         res.status(200).json({ authToken });
+      } else {
+        res.status(401).json({ errorMessage: "Incorrect Password" });
       }
     } else {
       res.status(400).json({ errorMessage: "Invalid User" });
@@ -83,6 +85,52 @@ router.get("/getuser", async (req, res)=>{
   } catch(error){
     console.log("error getting user for productlist", error)
 
+router.put("/:userId", async (req, res) => {
+  const { userId } = req.params;
+  const { name, email , password, imageUrl} = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(userId);
+    
+   if (!user) {
+      return res.status(404).send("User not found");
+    }
+    if (password) {
+      const passwordMatch = bcrypt.compareSync(password, user.password);
+
+      if (!passwordMatch) {
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        user.password = hashedPassword;
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { name, email, password: user.password, imageUrl },
+      { new: true }
+    );
+
+    res.send(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
+router.delete("/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findByIdAndDelete(userId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    res.send("User deleted successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
   }
 });
 
