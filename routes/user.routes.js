@@ -84,6 +84,8 @@ router.get("/getuser", async (req, res)=>{
     res.send({foundUser});
   } catch(error){
     console.log("error getting user for productlist", error)
+  }}
+)
 
 router.put("/:userId", async (req, res) => {
   const { userId } = req.params;
@@ -142,4 +144,4 @@ router.get("/verify", isAuthenticated, (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = router
