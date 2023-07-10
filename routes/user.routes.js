@@ -74,6 +74,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/getuser", async (req, res)=>{
+  console.log("step 2 email from reqbody",req.body)
+  try {
+    const foundUser = await User.find()
+    console.log("step 3 found user from db", foundUser)
+    res.send({foundUser});
+  } catch(error){
+    console.log("error getting user for productlist", error)
+
+  }
+});
+
 router.get("/verify", isAuthenticated, (req, res) => {
   console.log("Payload", req.payload);
   const { _id } = req.payload;
