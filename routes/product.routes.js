@@ -7,6 +7,7 @@ router.post("/newproduct", async (req, res) => {
   console.log("create product, need seller.avatar here",req.body);
   const seller = await User.findById(req.body.seller);
   console.log("seller",seller)
+  console.log("auth",req.headers.authorization)
   
   try {
     const createNewProduct = await Product.create({
