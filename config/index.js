@@ -37,7 +37,7 @@ module.exports = (app) => {
 
   // To have access to `body` property in the request
   app.use(express.json());
-  app.use(express.urlencoded({ extended: false}));
+  app.use(express.urlencoded({ extended: true}));
   app.use(cookieParser());
   app.use("/", express.static("uploads"));
   app.use(bodyParser.urlencoded({extended:true, limit:"50mb"}))

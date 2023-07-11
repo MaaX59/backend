@@ -3,29 +3,32 @@ const router = express.Router();
 const Product = require("../models/product.model");
 const User = require("../models/User.model");
 
-router.post("/newproduct", async (req, res) => {
-  console.log("create product, need seller.avatar here",req.body);
-  const seller = await User.findById(req.body.seller);
-  console.log("seller",seller)
-  console.log("auth",req.headers.authorization)
+const fileUploader = require("../config/cloudinary.config");
+
+router.post("/newproduct", fileUploader.single("imageUrl"), async (req, res, next) => {
+  console.log("file is: ", req.file);
+ 
   
   try {
+    console.log(req.body.seller);
+    // const seller = await User.findById(req.body.seller);
     const createNewProduct = await Product.create({
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
-      images: req.body.images,
       category: req.body.category,
       stock: req.body.stock,
       seller: req.body.seller,
-      sellerAvatar: seller.avatar,
-
+      images: [req.file.path],
     });
-    console.log("Successful creation of new product", createNewProduct);
+   
+    res.status(201).json({ message: "Product created successfully" });
   } catch (error) {
-    console.log("error while reating product on the backend", error);
+    console.log("error while creating product on the backend", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 
 router.get("/allproducts", async (req,res) => {
