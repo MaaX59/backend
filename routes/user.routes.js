@@ -4,12 +4,9 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require("../middlewares/jwt.auth");
+const fileUploader = require("../config/cloudinary.config");
 
-// const { upload } = require("../multer");
-// const ErrorHandler = require("../utils/ErrorHandler");
-// const path = require("path");
-
-router.post("/signup", async (req, res) => {
+router.post("/signup",fileUploader.single("avatar"), async (req, res) => {
   console.log("signup req.body", req.body);
   try {
     const existingUser = await User.findOne({ email: req.body.email });

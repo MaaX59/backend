@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Product = require("../models/product.model");
 const User = require("../models/User.model");
+const isAuthenticated = require("../middlewares/jwt.auth")
 
 const fileUploader = require("../config/cloudinary.config");
 
