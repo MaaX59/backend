@@ -44,11 +44,12 @@ const productSchema = new Schema({
     },
   },
   seller: {
-    String,
+    type:Schema.Types.ObjectId,
+    ref:"User"
     // required: [true, "Please enter product seller"],
   },
   sellerAvatar: {
-     String,
+     type:String,
   },
   stock: {
     type: Number,
