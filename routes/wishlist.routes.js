@@ -29,7 +29,7 @@ router.post("/:userId/addWishlist/:productId" ,isAuthenticated,   async (req, re
           if (user.wishlist && isFavourite) {
             return res.send("Product already in favourites");
           }
-          user.wishlist.push(productId);
+          user.wishlist.unshift(productId);
           await user.save();
     
           res.send("Product added to favourites");
@@ -74,6 +74,7 @@ router.delete("/:userId/removeWishlist/:productId",isAuthenticated, async (req, 
 
     // Find the user by ID
     const user = await User.findById(userId).populate("wishlist");
+   
 
     if (!user) {
       return res.send("User not found");
@@ -83,13 +84,19 @@ router.delete("/:userId/removeWishlist/:productId",isAuthenticated, async (req, 
     const productIndex = user.wishlist.findIndex(
       (product) => product._id.toString() === productId
     );
+    // console.log(productIndex)
+    // const productIndex = user.wishlist.indexOf(productId);
+
+  
+    // console.log(productIndex)
 
     if (productIndex === -1) {
       return res.send("No products in the wishlist");
     }
 
     // Remove the product from the wishlist
-    user.wishlist.splice(productIndex, 1);
+    user.wishlist.splice(productId, 1);
+   
 
     // Save the updated user
     await user.save();
