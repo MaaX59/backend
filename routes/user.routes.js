@@ -28,14 +28,14 @@ router.post("/signup",fileUploader.single("avatar"), async (req, res) => {
       shoppingCart:null,
     });
     await newUser.save();
-    const { _id, email } = newUser;
-    const payload = { _id, email };
+    const { _id, email, avatar, name } = newUser;
+    const payload = { _id, email, avatar, name };
     const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
       algorithm: "HS256",
       expiresIn: "6h",
     });
     console.log("New token", authToken);
-    res.status(200).json({ authToken });
+    res.status(200).json({ authToken, payload});
   } catch (err) {
     console.log(err);
   }
@@ -74,12 +74,13 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/getuser", async (req, res)=>{
+router.get("/getuser/:userId", async (req, res)=>{
   // console.log("step 2 email from reqbody",req.body)
   try {
-    const foundUser = await User.find()
+    const { userId } = req.params;
+    const foundUser = await User.findById(userId)
     // console.log("step 3 found user from db", foundUser)
-    res.send({foundUser});
+    res.status(200).json({foundUser});
   } catch(error){
     console.log("error getting user for productlist", error)
   }}

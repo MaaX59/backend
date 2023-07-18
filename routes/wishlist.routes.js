@@ -214,42 +214,50 @@ router.get("/:userId", isAuthenticated, async (req, res) => {
 
 
 //isAuthenticated,
-router.delete("/:userId/removeWishlist/:productId", async (req, res) => {
+router.get("/:userId/removeWishlist/:productId", async (req, res) => {
   
   try {
     const { userId, productId } = req.params;
 
+    const newWishlist = await User.updateOne({_id:userId},{$pull:{wishlist:productId}},{new:true})
+    // console.log("Your New Wishlist",newWishlist)
+    const updatedUser = await User.findById(userId)
+    console.log("This is your updated user",updatedUser)
+    res.status(200).json({updatedUser})
+
     // Find the user by ID
-    const user = await User.findById(userId).populate("wishlist");
+    // const user = await User.findById(userId).populate("wishlist");
    
 
-    if (!user) {
-      return res.send("User not found");
-    }
+    // if (!user) {
+    //   return res.send("User not found");
+    // }
 
     // Find the index of the product in the wishlist array
-    const productIndex = user.wishlist.findIndex(
-      (product) => product._id.toString() === productId
-    );
+    // const productIndex = user.wishlist.findIndex(
+    //   (product) => product._id.toString() === productId
+    // );
     // console.log(productIndex)
     // const productIndex = user.wishlist.indexOf(productId);
 
   
     // console.log(productIndex)
 
-    if (productIndex === -1) {
-      return res.send("No products in the wishlist");
-    }
+    // if (productIndex === -1) {
+    //   return res.send("No products in the wishlist");
+    // }
 
     // Remove the product from the wishlist
-    user.wishlist.splice(productId, 1);
+    // user.wishlist.splice(productId, 1);
    
 
     // Save the updated user
-    await user.save();
+  //   await user.save();
 
-    res.send("Product removed from the wishlist");
-  } catch (error) {
+  //   res.send("Product removed from the wishlist");
+  // 
+} 
+  catch (error) {
     console.log("Error removing product from wishlist", error);
     res.status(500).json({ message: "Internal server error" });
   }
