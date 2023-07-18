@@ -19,14 +19,15 @@ router.post("/signup",fileUploader.single("avatar"), async (req, res) => {
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashedpassword = bcrypt.hashSync(req.body.password, salt);
-    const newUser = await User.create({
+    const newUser = new User({
       name: req.body.name,
       email: req.body.email,
       password: hashedpassword,
-      avatar: req.file,
+      avatar: [req.file.path],
       wishlist: null,
       shoppingCart:null,
     });
+    await newUser.save();
     const { _id, email } = newUser;
     const payload = { _id, email };
     const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {

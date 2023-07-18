@@ -16,10 +16,9 @@ const userSchema = new Schema({
     required: [true, "Please enter your password"],
     minLength: [4, "Password should be greater than 4 characters"],
   },
-  avatar:{
-    type: String,
-    required: false,
- },
+  avatar:[
+   String,
+    ],
  wishlist: [
   {
     type: Schema.Types.ObjectId,
