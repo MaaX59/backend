@@ -8,8 +8,9 @@ const { isAuthenticated } = require('../middlewares/jwt.auth');
 router.put('/:userId/cart/:productId/:amount', async (req, res) => {
   try {
     const { productId, amount, userId } = req.params;
+    
     //const userId = req.payload._id;
-    console.log("req params", req.params)
+    console.log("req body", req.body)
     
 
 
@@ -18,7 +19,7 @@ router.put('/:userId/cart/:productId/:amount', async (req, res) => {
     if (!user) {
       return res.send('User not found');
     }
-    console.log(user)
+    //console.log(user)
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -29,18 +30,16 @@ router.put('/:userId/cart/:productId/:amount', async (req, res) => {
     // if (isProductInCart) {
     //   return res.send('Product already in cart');
     // }
-    const itemAndAmount = {
-      product: productId,
-      amountOfItems:amount,
-    }
-    console.log("items and amount",itemAndAmount)
+    //const productAndAmount = product.push({amountOfItems:amount})
+   
+    
     user.shoppingCart = user.shoppingCart || [];
         const isInCart = user.shoppingCart.includes(productId);
         if (user.shoppingCart && isInCart) {
           return res.send("Product already in favourites");
         }
 
-    user.shoppingCart.push(itemAndAmount);
+    user.shoppingCart.push(req.body);
     await user.save();
 
     
