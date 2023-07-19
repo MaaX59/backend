@@ -23,7 +23,7 @@ router.post("/signup",fileUploader.single("avatar"), async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: hashedpassword,
-      avatar: req.file,
+      // avatar: req.file.path,
       wishlist: null,
       shoppingCart:null,
     });

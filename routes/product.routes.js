@@ -35,7 +35,7 @@ router.get('/created', isAuthenticated, async (req, res) => {
     const userId = req.payload._id;
     const userProducts = await Product.find({ seller: userId });
     console.log(userId)
-    console.log(userProducts)
+    console.log("user products",userProducts)
     res.status(200).json({ products: userProducts});
   } catch (error) {
     console.log('Error while retrieving new products', error);
