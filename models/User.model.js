@@ -25,10 +25,9 @@ const userSchema = new Schema({
     ref: "Product",
   },
 ],
-shippingCart: [
+shoppingCart: [
   {
-    type: Schema.Types.ObjectId,
-    ref: "Product",
+    type: Object,
   },
 ],
  createdAt:{

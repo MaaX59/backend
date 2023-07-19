@@ -4,38 +4,55 @@ const Product = require('../models/product.model');
 const User = require('../models/User.model');
 const { isAuthenticated } = require('../middlewares/jwt.auth');
 
+//isAuthanticated,
+router.put('/:userId/cart/:productId/:amount', async (req, res) => {
+  try {
+    const { productId, amount, userId } = req.params;
+    //const userId = req.payload._id;
+    console.log("req params", req.params)
+    
 
-router.post('/:userId/cart/:productId',isAuthenticated, async (req, res) => {
-    try {
-      const { userId, productId } = req.params;
-  
-      const user = await User.findById(userId);
-      if (!user) {
-        return res.send('User not found');
-      }
-  
-      const product = await Product.findById(productId);
-      if (!product) {
-        return res.send('Product not found');
-      }
-  
-      const isProductInCart = user.cart.includes(productId);
-      if (isProductInCart) {
-        return res.send('Product already in cart');
-      }
-  
-      user.cart.push(productId);
-      await user.save();
 
-      
-    console.log(`Product added to cart: ${product}`);
-  
-      res.send('Product added to cart');
-    } catch (error) {
-      console.log('Error adding product to cart:', error);
-      res.status(500).json({ message: 'Internal server error' });
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.send('User not found');
     }
-  });
+    console.log(user)
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.send('Product not found');
+    }
+
+    // const isProductInCart = user.cart.includes(productId);
+    // if (isProductInCart) {
+    //   return res.send('Product already in cart');
+    // }
+    const itemAndAmount = {
+      product: productId,
+      amountOfItems:amount,
+    }
+    console.log("items and amount",itemAndAmount)
+    user.shoppingCart = user.shoppingCart || [];
+        const isInCart = user.shoppingCart.includes(productId);
+        if (user.shoppingCart && isInCart) {
+          return res.send("Product already in favourites");
+        }
+
+    user.shoppingCart.push(itemAndAmount);
+    await user.save();
+
+    
+  console.log(`Product added to cart: ${product}`);
+
+    res.send('Product added to cart');
+  } catch (error) {
+    console.log('Error adding product to cart:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
   // Get products in the shopping cart
 router.get('/:userId/cart',isAuthenticated,  async (req, res) => {
@@ -58,10 +75,11 @@ router.get('/:userId/cart',isAuthenticated,  async (req, res) => {
   });
   
   
-  // Remove product from shopping cart
-  router.delete('/:userId/cart/:productId', isAuthenticated, async (req, res) => {
+  // Remove product from shopping cart isAuthenticated,
+  router.delete('/:userId/cart/:productId',  async (req, res) => {
     try {
       const { userId, productId } = req.params;
+      console.log("backend delete", req.params)
   
       const user = await User.findById(userId);
       if (!user) {
