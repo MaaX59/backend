@@ -55,8 +55,8 @@ router.post("/login", async (req, res) => {
       );
       console.log("Password Match", passwordMatch);
       if (passwordMatch) {
-        const { _id, email } = foundUser;
-        const payload = { _id, email };
+        const { _id, email, avatar, name } = foundUser;
+        const payload = { _id, email, avatar, name };
         const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {
           algorithm: "HS256",
           expiresIn: "6h",
@@ -139,7 +139,7 @@ router.get("/verify", isAuthenticated, (req, res) => {
   console.log("Payload", req.payload);
   const { _id } = req.payload;
   if (req.payload) {
-    res.status(200).json({ user: req.payload });
+    res.status(200).json({ user: req.payload});
   }
 });
 
