@@ -4,9 +4,6 @@ const Product = require("../models/product.model");
 const User = require("../models/User.model");
 const { isAuthenticated } = require("../middlewares/jwt.auth");
 
-
-
-
 // router.post(
 //   "/:userId/wishlist/:productId",
 //   isAuthenticated,
@@ -14,7 +11,7 @@ const { isAuthenticated } = require("../middlewares/jwt.auth");
 //     console.log("Payload", req.payload);
 //     const { _id } = req.payload;
 //     if (req.payload ) {
-//    
+//
 //      res.send("Authenticated user to add products to the wishlist");
 //     res.redirect('favourites')
 //     } else {
@@ -68,7 +65,6 @@ const { isAuthenticated } = require("../middlewares/jwt.auth");
 //         return res.status(404).json({ error: "Product not found" });
 //       }
 
-
 //       const isFavourite = user.wishlist.includes(productId);
 //       if (isFavourite) {
 //         return res.status(400).json({ error: "Product already in favourites" });
@@ -88,8 +84,6 @@ const { isAuthenticated } = require("../middlewares/jwt.auth");
 //     return res.status(500).json({ error: "Internal server error" });
 //   }
 // });
-
-
 
 // router.get("/:userId/", isAuthenticated, async (req, res) => {
 
@@ -157,44 +151,38 @@ const { isAuthenticated } = require("../middlewares/jwt.auth");
 // isAuthenticated,
 
 //add to wish list
-router.post("/:userId/addWishlist/:productId" ,   async (req, res) => {
-  
+router.post("/:userId/addWishlist/:productId", async (req, res) => {
   try {
-          const { userId, productId } = req.params;
-          console.log("backend wishlist", userId)
-    
-          const user = await User.findById(userId);
-          if (!user) {
-            return res.send("User not found");
-          }
-          const product = await Product.findById(productId);
-    
-          if (!product) {
-            return res.send("Product not found");
-          }
-    
-          user.wishlist = user.wishlist || [];
-          const isFavourite = user.wishlist.includes(productId);
-          if (user.wishlist && isFavourite) {
-            return res.send("Product already in favourites");
-          }
-          user.wishlist.unshift(productId);
-          await user.save();
-    
-          res.send("Product added to favourites");
-        } catch (error) {
-          console.log("Error adding product to favourites:", error);
-          res.status(500).json({ error: "Internal server error" });
-        }
-      });
+    const { userId, productId } = req.params;
+    console.log("backend wishlist", userId);
 
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.send("User not found");
+    }
+    const product = await Product.findById(productId);
 
-      
-      
+    if (!product) {
+      return res.send("Product not found");
+    }
+
+    user.wishlist = user.wishlist || [];
+    const isFavourite = user.wishlist.includes(productId);
+    if (user.wishlist && isFavourite) {
+      return res.send("Product already in favourites");
+    }
+    user.wishlist.unshift(productId);
+    await user.save();
+
+    res.send("Product added to favourites");
+  } catch (error) {
+    console.log("Error adding product to favourites:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.get("/:userId", isAuthenticated, async (req, res) => {
-
- try {
+  try {
     const { userId } = req.params;
 
     // Find the user by ID
@@ -212,52 +200,97 @@ router.get("/:userId", isAuthenticated, async (req, res) => {
   }
 });
 
+//max vertion
+// router.delete("/:userId/removeWishlist/:productId", async (req, res) => {
+//   try {
+//     const { userId, productId } = req.params;
+//     console.log("req params to be deleted", req.params);
 
-//isAuthenticated,
-router.get("/:userId/removeWishlist/:productId", async (req, res) => {
-  
+//     // const newWishlist = await User.updateOne({_id:userId},{$pull:{wishlist:productId}},{new:true})
+//     // // console.log("Your New Wishlist",newWishlist)
+//     // const updatedUser = await User.findById(userId)
+//     // console.log("This is your updated user",updatedUser)
+//     // res.status(200).json({updatedUser})
+
+//     //Find the user by ID
+//     const user = await User.findById(userId).populate("wishlist");
+//     console.log("user populate wishlist", user)
+
+//     if (!user) {
+//       return res.send("User not found");
+//     }
+
+//     // Find the index of the product in the wishlist array
+//     const productIndex = user.wishlist.findIndex(
+//       (product) => product._id.toString() === productId
+//     );
+
+//     // const productIndex = user.wishlist.indexOf(productId);
+
+//     console.log(productIndex);
+
+//     if (productIndex === -1) {
+//       return res.send("No products in the wishlist");
+//     }
+
+//     // Remove the product from the wishlist
+//     user.wishlist.splice(productId, 1);
+
+//     // Save the updated user
+//     await user.save();
+
+//     res.send("Product removed from the wishlist");
+//   } catch (error) {
+//     console.log("Error removing product from wishlist", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
+router.delete("/:userId/removeWishlist/:productId", async (req, res) => {
   try {
     const { userId, productId } = req.params;
+    console.log("req params to be deleted", req.params);
 
-    const newWishlist = await User.updateOne({_id:userId},{$pull:{wishlist:productId}},{new:true})
-    // console.log("Your New Wishlist",newWishlist)
+//Find the user by ID
+    // const user = await User.findById(userId).populate("wishlist");
+    // console.log("user populate wishlist", user)
+
+
+
+
+    await User.updateOne({_id:userId},{$pull:{wishlist:productId}},{new:true})
+     //console.log("Your New Wishlist",newWishlist)
     const updatedUser = await User.findById(userId)
     console.log("This is your updated user",updatedUser)
     res.status(200).json({updatedUser})
 
-    // Find the user by ID
-    // const user = await User.findById(userId).populate("wishlist");
-   
+    
 
     // if (!user) {
     //   return res.send("User not found");
     // }
 
-    // Find the index of the product in the wishlist array
+    // // Find the index of the product in the wishlist array
     // const productIndex = user.wishlist.findIndex(
     //   (product) => product._id.toString() === productId
     // );
-    // console.log(productIndex)
-    // const productIndex = user.wishlist.indexOf(productId);
 
-  
-    // console.log(productIndex)
+    // // const productIndex = user.wishlist.indexOf(productId);
+
+    // console.log(productIndex);
 
     // if (productIndex === -1) {
     //   return res.send("No products in the wishlist");
     // }
 
-    // Remove the product from the wishlist
+    // // Remove the product from the wishlist
     // user.wishlist.splice(productId, 1);
-   
 
-    // Save the updated user
-  //   await user.save();
+    // // Save the updated user
+    // await user.save();
 
-  //   res.send("Product removed from the wishlist");
-  // 
-} 
-  catch (error) {
+    // res.send("Product removed from the wishlist");
+  } catch (error) {
     console.log("Error removing product from wishlist", error);
     res.status(500).json({ message: "Internal server error" });
   }
