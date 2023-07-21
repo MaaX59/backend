@@ -79,21 +79,27 @@ router.get('/:userId/cart',isAuthenticated,  async (req, res) => {
     try {
       const { userId, productId } = req.params;
       console.log("backend delete", req.params)
+
+      await User.updateOne({_id:userId},{$pull:{"shoppingCart":{_id:productId}}},{new:true})
+      //console.log("Your New Wishlist",newWishlist)
+     const updatedUser = await User.findById(userId)
+     console.log("This is your updated user",updatedUser)
+     res.status(200).json({updatedUser})
   
-      const user = await User.findById(userId);
-      if (!user) {
-        return res.send('User not found');
-      }
+      // const user = await User.findById(userId);
+      // if (!user) {
+      //   return res.send('User not found');
+      // }
   
-      const productIndex = user.cart.findIndex((product) => product.toString() === productId);
-      if (productIndex === -1) {
-        return res.send('Product not found in cart');
-      }
+      // const productIndex = user.shoppingCart.findIndex((product) => product.toString() === productId);
+      // if (productIndex === -1) {
+      //   return res.send('Product not found in cart');
+      // }
   
-      user.cart.splice(productIndex, 1);
-      await user.save();
+      // user.shoppingCart.splice(productIndex, 1);
+      // await user.save();
   
-      res.send('Product removed from cart');
+      // res.send('Product removed from cart');
     } catch (error) {
       console.log('Error removing product from cart:', error);
       res.status(500).json({ message: 'Internal server error' });
