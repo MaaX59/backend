@@ -8,7 +8,7 @@ const stripe = Stripe(process.env.STRIPE_KEY);
 const router = express.Router();
 
 router.post("/create-checkout-session", async (req, res) => {
-  const line_items = req.body.cartItems.map((item) => {
+  const line_items = req.body.cartItem.map((item) => {
     return {
       price_data: {
         currency: "EUR",

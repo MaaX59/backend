@@ -17,7 +17,9 @@ require("./config")(app);
 // 👇 Start handling routes here
 const indexRoutes = require("./routes/index.routes");
 const ErrorHandler = require("./utils/ErrorHandler");
+const stripe = require("./routes/stripe");
 
+app.use("/api/stripe", stripe);
 app.use("/api", indexRoutes);
 
 const userRoutes = require("./routes/user.routes")
