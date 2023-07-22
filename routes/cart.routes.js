@@ -4,6 +4,13 @@ const Product = require('../models/product.model');
 const User = require('../models/User.model');
 const { isAuthenticated } = require('../middlewares/jwt.auth');
 
+
+
+
+router.post ('/')
+
+
+
 //isAuthanticated,
 router.put('/:userId/cart/:productId/:amount', async (req, res) => {
   try {
