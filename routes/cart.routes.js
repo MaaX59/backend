@@ -7,7 +7,15 @@ const { isAuthenticated } = require('../middlewares/jwt.auth');
 
 
 
-router.post ('/')
+router.post('/:userId/shoppingcart'), async (req,res) => {
+  console.log("recived data on backend from cart",req.body)
+  try {
+
+  } catch (error){
+console.log("error on creating order model", error)
+  }
+
+}
 
 
 
