@@ -70,7 +70,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 //update products
-router.put('/:id', isAuthenticated, async (req, res) => {
+router.put('/editproduct', isAuthenticated, async (req, res) => {
   try {
     const userId = req.payload._id;
     const productId = req.params.id;
@@ -80,7 +80,6 @@ router.put('/:id', isAuthenticated, async (req, res) => {
     if (!product) {
       return res.status(404).json({ error: 'Product not found or unauthorized' });
     }
-
     // Update the product fields
     product.name = req.body.name;
     product.description = req.body.description;

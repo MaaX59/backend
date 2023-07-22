@@ -89,15 +89,16 @@ router.get("/getuser/:userId", async (req, res)=>{
 router.put("/:userId", async (req, res) => {
   const { userId } = req.params;
   const { name, email , password, imageUrl} = req.body;
-
+  console.log("req body", req.body);
   try {
     const user = await User.findByIdAndUpdate(userId);
     
    if (!user) {
       return res.status(404).send("User not found");
     }
-    if (password) {
+    if (password && password !== user.password) {
       const passwordMatch = bcrypt.compareSync(password, user.password);
+      console.log("updated name", name)
 
       if (!passwordMatch) {
         const hashedPassword = bcrypt.hashSync(password, 10);
@@ -107,11 +108,13 @@ router.put("/:userId", async (req, res) => {
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { name, email, password: user.password, imageUrl },
+      { name, email, imageUrl },
       { new: true }
     );
+    // console.log("newuser details", name)
 
     res.send(updatedUser);
+    console.log("Updated new User", updatedUser)
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
