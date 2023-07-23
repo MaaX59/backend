@@ -7,7 +7,19 @@ const { isAuthenticated } = require('../middlewares/jwt.auth');
 
 
 
+router.put('/:userId/shippinginfo', async (req,res) => {
+  const user = req.params;
+  const shippingInfo = req.body;
 
+  try {
+   
+    const updateOrder = await Order.updateOne({buyer:user.userId}, {shippingInfo}, {new:true})
+    
+    res.status(201).json({ message: "Order created successfully" });
+  } catch (error) { console.log("error while upating model",error )
+    
+  }
+} )
 router.post('/:userId/shoppingcart', async (req,res) => {
   const cartToDb = req.body;
   const {userId} = req.params;
