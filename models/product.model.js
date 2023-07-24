@@ -11,6 +11,10 @@ const productSchema = new Schema({
     type: Number,
     default: 0.0,
   },
+  negotiable: {
+    type: Boolean,
+    default: false,
+  },
   description: {
     type: String,
     required: [true, "Please enter product description"],

@@ -17,6 +17,7 @@ router.post("/newproduct", fileUploader.single("imageUrl"), isAuthenticated, asy
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
+      negotiable: req.body.negotiable,
       category: req.body.category,
       stock: req.body.stock,
       seller: req.payload._id,
@@ -39,6 +40,29 @@ router.get('/created', isAuthenticated, async (req, res) => {
     res.status(200).json({ products: userProducts});
   } catch (error) {
     console.log('Error while retrieving new products', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.post("/negotiate", isAuthenticated, async (req, res) => {
+  try {
+    const { productId, negotiationPrice } = req.body;
+    const userId = req.payload._id;
+
+    // First, check if the product exists and belongs to the logged-in user
+    const product = await Product.findOne({ _id: productId, seller: userId });
+    if (!product) {
+      return res.status(404).json({ error: "Product not found or unauthorized" });
+    }
+
+    // Update the product's negotiationPrice field
+    product.negotiationPrice = negotiationPrice;
+    await product.save();
+    console.log(product);
+
+    res.status(200).json({ message: "Negotiation price updated successfully" });
+  } catch (error) {
+    console.log('Error while updating negotiation price:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
