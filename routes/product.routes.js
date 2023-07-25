@@ -49,24 +49,44 @@ router.post("/negotiate",isAuthenticated, async (req, res) => {
   try {
     const { productId, negotiationPrice } = req.body;
     const _id = req.payload._id;
-    console.log("userId Backend",_id)
-    // const product = await Product.findOne({ _id: productId, seller: userId });
-    // if (!product) {
-    //   return res.status(404).json({ error: "Product not found or unauthorized" });
-    // }
+    console.log("userId loggedin Backend",_id)
+    const product = await Product.findById(productId);;
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    const sellerId = product.seller;
+    console.log("SellerId", sellerId)
+
+    const productName = product.name;
+  
    const newNegotiation = await Negotiation.create({
+    productName: productName,
       product: productId,
       buyer: _id,
       demandingPrice: negotiationPrice,
+      seller:  sellerId.toString(),
+      
     });
     console.log("newNegotiation backend", newNegotiation);
-    console.log("Demanding price",newNegotiation.demandingPrice);
-   
+    //console.log("Demanding price",newNegotiation.demandingPrice);
+    
     //await newNegotiation.save();
     res.status(200).json({ message: "Negotiation price updated successfully" });
   } catch (error) {
     console.log('Error while updating negotiation price:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get("/seller/negotiations", isAuthenticated, async (req, res) => {
+  try {
+    const userId = req.payload._id;
+    const negotiations = await Negotiation.find({ user: userId })
+      .populate("product", "name price description"); 
+  res.status(200).json({ negotiations });
+  } catch (error) {
+    console.log("Error while fetching negotiated products:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
