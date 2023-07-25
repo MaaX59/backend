@@ -2,12 +2,52 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/product.model');
 const User = require('../models/User.model');
+const Order = require ('../models/order.model')
 const { isAuthenticated } = require('../middlewares/jwt.auth');
 
 
 
+router.put('/:userId/shippinginfo', async (req,res) => {
+  const user = req.params;
+  const shippingInfo = req.body;
 
-router.post ('/')
+  try {
+   
+    const updateOrder = await Order.updateOne({buyer:user.userId}, {shippingInfo}, {new:true})
+    
+    res.status(201).json({ message: "Order created successfully" });
+  } catch (error) { console.log("error while upating model",error )
+    
+  }
+} )
+router.post('/:userId/shoppingcart', async (req,res) => {
+  const cartToDb = req.body;
+  const {userId} = req.params;
+  console.log(cartToDb)
+
+
+  try { 
+   const newOrder= await Order.create({
+      shippingInfo:{
+        name: null,
+        address:null,
+        country: null,
+        city:null,
+        phoneNo:null,
+        postalCode:null,
+      },
+      buyer:userId,
+      orderItems: cartToDb,
+
+    });
+    res.status(201).json({ message: "Order created successfully" });
+
+
+  } catch (error){
+console.log("error on creating order model", error)
+  }
+
+})
 
 
 
