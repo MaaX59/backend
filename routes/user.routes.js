@@ -6,7 +6,16 @@ const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require("../middlewares/jwt.auth");
 const fileUploader = require("../config/cloudinary.config");
 
+<<<<<<< HEAD
 router.post("/signup",fileUploader.single("avatar"), async (req, res) => {
+=======
+
+// const { upload } = require("../multer");
+// const ErrorHandler = require("../utils/ErrorHandler");
+// const path = require("path");
+
+router.post("/signup", async (req, res) => {
+>>>>>>> cb5fb519bd710edb4eb5069868e4ea71c1e6f2df
   console.log("signup req.body", req.body);
   try {
     const existingUser = await User.findOne({ email: req.body.email });
@@ -15,6 +24,8 @@ router.post("/signup",fileUploader.single("avatar"), async (req, res) => {
         .status(400)
         .json({ error: "Email already exists,Please Login!" });
     }
+    const img= req.body.avatar;
+    console.log("img file",img)
 
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);

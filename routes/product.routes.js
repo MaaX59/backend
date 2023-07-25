@@ -5,11 +5,19 @@ const User = require("../models/User.model");
 const {isAuthenticated} = require("../middlewares/jwt.auth")
 const Negotiation = require("../models/negotiation.model")
 
+<<<<<<< HEAD
 const fileUploader = require("../config/cloudinary.config");
 
 router.post("/newproduct", fileUploader.single("imageUrl"), isAuthenticated, async (req, res, next) => {
   console.log("file is: ", req.file);
  
+=======
+
+router.post("/newproduct", async (req, res) => {
+  console.log("create product, need seller.avatar here",req.body);
+  const seller = await User.findById(req.body.seller);
+  console.log("seller",seller)
+>>>>>>> cb5fb519bd710edb4eb5069868e4ea71c1e6f2df
   
   try {
     console.log(req.body.seller);
@@ -103,6 +111,7 @@ router.get("/allproducts", async (req,res) => {
     }
 });
 
+
 //get Single product
 router.get("/:id", async (req, res) => {
   try {
@@ -163,6 +172,7 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 module.exports = router;
