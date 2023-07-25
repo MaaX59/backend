@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require("../models/product.model");
 const User = require("../models/User.model");
 const {isAuthenticated} = require("../middlewares/jwt.auth")
+const Negotiation = require("../models/negotiation.model")
 
 const fileUploader = require("../config/cloudinary.config");
 
@@ -44,22 +45,24 @@ router.get('/created', isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/negotiate", isAuthenticated, async (req, res) => {
+router.post("/negotiate",isAuthenticated, async (req, res) => {
   try {
     const { productId, negotiationPrice } = req.body;
-    const userId = req.payload._id;
-
-    // First, check if the product exists and belongs to the logged-in user
-    const product = await Product.findOne({ _id: productId, seller: userId });
-    if (!product) {
-      return res.status(404).json({ error: "Product not found or unauthorized" });
-    }
-
-    // Update the product's negotiationPrice field
-    product.negotiationPrice = negotiationPrice;
-    await product.save();
-    console.log(product);
-
+    const _id = req.payload._id;
+    console.log("userId Backend",_id)
+    // const product = await Product.findOne({ _id: productId, seller: userId });
+    // if (!product) {
+    //   return res.status(404).json({ error: "Product not found or unauthorized" });
+    // }
+   const newNegotiation = await Negotiation.create({
+      product: productId,
+      buyer: _id,
+      demandingPrice: negotiationPrice,
+    });
+    console.log("newNegotiation backend", newNegotiation);
+    console.log("Demanding price",newNegotiation.demandingPrice);
+   
+    //await newNegotiation.save();
     res.status(200).json({ message: "Negotiation price updated successfully" });
   } catch (error) {
     console.log('Error while updating negotiation price:', error);
