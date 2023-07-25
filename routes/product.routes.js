@@ -81,9 +81,8 @@ router.post("/negotiate",isAuthenticated, async (req, res) => {
 router.get("/seller/negotiations", isAuthenticated, async (req, res) => {
   try {
     const userId = req.payload._id;
-    const negotiations = await Negotiation.find({ user: userId })
-      .populate("product", "name price description"); 
-  res.status(200).json({ negotiations });
+    const negotiatedProducts = await Negotiation.find({seller: userId} )
+    res.status(200).json({ negotiatedProducts });
   } catch (error) {
     console.log("Error while fetching negotiated products:", error);
     res.status(500).json({ error: "Internal server error" });
