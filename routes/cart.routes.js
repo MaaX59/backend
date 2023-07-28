@@ -14,6 +14,7 @@ router.put('/:userId/shippinginfo', async (req,res) => {
   try {
    
     const updateOrder = await Order.updateOne({buyer:user.userId}, {shippingInfo}, {new:true})
+    const deleteCartInUser = await User.updateOne({_id:user.userId}, {shoppingCart:null}, {new:true})
     
     res.status(201).json({ message: "Order created successfully" });
   } catch (error) { console.log("error while upating model",error )
